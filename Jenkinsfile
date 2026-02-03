@@ -10,13 +10,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean compile'
+                bat 'mvn clean package'
             }
         }
 
-        stage('Run') {
+        stage('Test') {
             steps {
-                bat 'java -cp target/classes com.buildmaster.App'
+                bat 'mvn test'
+            }
+        }
+
+        stage('Result') {
+            steps {
+                echo 'Build and Test completed successfully'
             }
         }
     }
