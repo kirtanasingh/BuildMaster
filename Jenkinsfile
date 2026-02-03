@@ -2,16 +2,14 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'
         jdk 'JDK'
+        maven 'Maven'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/kirtanasingh/BuildMaster.git'
+                checkout scm
             }
         }
 
@@ -30,18 +28,20 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 bat '''
-                copy /Y target\\*.war C:\\tomcat\\webapps
+                echo Deploying BuildMaster.war to Tomcat...
+                dir target
+                copy /Y "target\\BuildMaster.war" "C:\\tomcat\\webapps\\"
                 '''
             }
         }
     }
 
     post {
-        success {
-            echo 'Build, Test and Deployment Successful!'
-        }
         failure {
             echo 'Pipeline Failed'
+        }
+        success {
+            echo 'Pipeline Successful'
         }
     }
 }
