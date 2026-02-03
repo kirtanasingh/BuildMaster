@@ -30,7 +30,7 @@ pipeline {
                 bat '''
                 echo Deploying BuildMaster.war to Tomcat...
                 dir target
-                copy /Y "target\\BuildMaster.war" "C:\\tomcat\\webapps\\"
+                copy /Y "target\\BuildMaster.war" "C:\\Program Files\\apache-tomcat-9.0.115\\webapps\"
                 '''
             }
         }
