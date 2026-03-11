@@ -1,47 +1,19 @@
 pipeline {
     agent any
-
-    tools {
-        jdk 'JDK'
-        maven 'Maven'
-    }
-
+ 
     stages {
-        stage('Checkout') {
+ 
+        stage('Build Docker Image') {
             steps {
-                checkout scm
+                bat 'docker build -t myapp .'
             }
         }
-
-        stage('Build') {
+ 
+        stage('Run Container') {
             steps {
-                bat 'mvn clean package'
+                bat 'docker run -d -p 8080:80 myapp'
             }
         }
-
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('Deploy to Tomcat') {
-            steps {
-                bat '''
-                echo Deploying BuildMaster.war to Tomcat...
-                dir target
-                copy /Y "target\\BuildMaster.war" "C:\\Program Files\\apache-tomcat-9.0.115\\webapps\"
-                '''
-            }
-        }
-    }
-
-    post {
-        failure {
-            echo 'Pipeline Failed'
-        }
-        success {
-            echo 'Pipeline Successful'
-        }
+ 
     }
 }
